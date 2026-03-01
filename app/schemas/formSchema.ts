@@ -4,10 +4,10 @@ const FormContact = z.object({
   fullName: z
     .string()
     .min(5, {
-      error: "Name can not be smaller than 5 characters",
+      error: "Numele necesita minim 5 caractere",
     })
     .max(100, {
-      error: "Name can not be bigger than 100 characters",
+      error: "Numele nu poate fi mai lung de 5 caractere",
     }),
   willCome: z.boolean().nonoptional(),
   willBeChildren: z.boolean().nonoptional(),
@@ -15,7 +15,7 @@ const FormContact = z.object({
   comment: z
     .string()
     .max(500, {
-      error: "Comment can not be bigger than 500 characters",
+      error: "Comentariul nu poate fi mai lung de 500 caractere",
     })
     .optional(),
 });

@@ -69,6 +69,11 @@ export default function Form() {
         <div className="space-y-2">
           <Label htmlFor="fullName">Nume complet</Label>
           <Input id="fullName" {...register("fullName")} />
+          {errors.fullName && (
+            <div className="text-xs text-red-500">
+              {errors?.fullName.message}
+            </div>
+          )}
         </div>
         <div className="space-y-2">
           <Label htmlFor="willCome">Vei veni?</Label>
@@ -128,6 +133,11 @@ export default function Form() {
         <div className="space-y-2">
           <Label htmlFor="comment">Comentariu</Label>
           <Textarea id="comment" {...register("comment")} />
+          {errors.comment && (
+            <div className="text-xs text-red-500">
+              {errors?.comment.message}
+            </div>
+          )}
         </div>
         <Button
           disabled={loading}
