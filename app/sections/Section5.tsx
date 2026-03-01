@@ -6,7 +6,7 @@ export default function Section5() {
       <div className="space-y-14">
         <img src={flower_5.src} className="w-40 mx-auto" />
         <h2 className="text-center text-6xl max-w-2/3 mx-auto">
-          We look forward to celebrating with you!
+          Abia așteptăm să sărbătorim alături de tine!
         </h2>
         <img src={flower_6.src} className="w-40 mx-auto" />
       </div>

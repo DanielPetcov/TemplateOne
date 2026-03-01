@@ -1,3 +1,5 @@
+import AnimatedImage from "@/components/animated-image";
+
 interface Section3Props {
   couplePhoto1Url: string;
   couplePhoto2Url: string;
@@ -11,9 +13,9 @@ export default function Section3({
 }: Section3Props) {
   return (
     <div className="container mx-auto px-2 space-y-4 mt-10">
-      <img src={couplePhoto1Url} className="max-w-[90%] mx-auto" />
-      <img src={couplePhoto2Url} className="max-w-[90%] mx-auto" />
-      <img src={couplePhoto3Url} className="max-w-[90%] mx-auto" />
+      <AnimatedImage url={couplePhoto1Url} className="max-w-[90%] mx-auto" />
+      <AnimatedImage url={couplePhoto2Url} className="max-w-[90%] mx-auto" />
+      <AnimatedImage url={couplePhoto3Url} className="max-w-[90%] mx-auto" />
     </div>
   );
 }

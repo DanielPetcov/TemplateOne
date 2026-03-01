@@ -1,76 +1,107 @@
-'use client';
+"use client";
 
-import z from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-import { FormContact } from '@/templates/projects/t1/schemas/formSchema';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Textarea } from '@/components/ui/textarea';
+import { useForm, SubmitHandler, Controller } from "react-hook-form";
+import { FormContact } from "../schemas/formSchema";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
+import { useFadeIn } from "@/hooks/useFadeIn";
+
+import { animated } from "@react-spring/web";
+import { toast } from "sonner";
+import { useState } from "react";
 
 export default function Form() {
+  const [loading, setLoading] = useState(false);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
     control,
   } = useForm({
     resolver: zodResolver(FormContact),
     defaultValues: {
-      fullName: '',
+      fullName: "",
       willCome: true,
       willBeChildren: false,
-      personsNumber: '0',
-      comment: '',
+      personsNumber: "1",
+      comment: "",
     },
   });
 
-  const onSubmit: SubmitHandler<z.infer<typeof FormContact>> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<z.infer<typeof FormContact>> = async (data) => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/rspv", {
+        method: "POST",
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        toast("Înscrierea dvs. a fost trimisă", {
+          position: "bottom-center",
+        });
+        reset();
+      }
+    } catch {
+      toast.error("Ceva nu a mers!");
+    } finally {
+      setLoading(false);
+    }
   };
 
+  const { ref, style } = useFadeIn({ amount: 0.5 });
+
   return (
-    <div className="container mx-auto mt-10 px-10">
+    <animated.div
+      ref={ref}
+      style={style}
+      className="container mx-auto mt-10 px-10"
+    >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
         <div className="space-y-2">
-          <Label htmlFor="fullName">Full Name</Label>
-          <Input id="fullName" {...register('fullName')} />
+          <Label htmlFor="fullName">Nume complet</Label>
+          <Input id="fullName" {...register("fullName")} />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="willCome">Will you come?</Label>
+          <Label htmlFor="willCome">Vei veni?</Label>
           <Controller
             name="willCome"
             control={control}
             render={({ field }) => (
               <RadioGroup
-                value={field.value === true ? 'yes' : 'no'}
-                onValueChange={(v) => field.onChange(v === 'yes')}
+                value={field.value === true ? "yes" : "no"}
+                onValueChange={(v) => field.onChange(v === "yes")}
                 id="willCome"
               >
                 <div className="flex items-center gap-2">
                   <RadioGroupItem value="yes" id="r1" />
-                  <Label htmlFor="r1">Yes</Label>
+                  <Label htmlFor="r1">Da</Label>
                 </div>
                 <div className="flex items-center gap-2">
                   <RadioGroupItem value="no" id="r2" />
-                  <Label htmlFor="r2">No</Label>
+                  <Label htmlFor="r2">Nu</Label>
                 </div>
               </RadioGroup>
             )}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="willBeChildren">Will you come with children?</Label>
+          <Label htmlFor="willBeChildren">Vei veni cu copii?</Label>
           <Controller
             name="willBeChildren"
             control={control}
             render={({ field }) => (
               <RadioGroup
-                value={field.value === true ? 'yes' : 'no'}
-                onValueChange={(v) => field.onChange(v === 'yes')}
+                value={field.value === true ? "yes" : "no"}
+                onValueChange={(v) => field.onChange(v === "yes")}
                 id="willBeChildren"
               >
                 <div className="flex items-center gap-2">
@@ -86,22 +117,27 @@ export default function Form() {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="personsNumber">How many persons will come?</Label>
+          <Label htmlFor="personsNumber">Câte persoane vor veni?</Label>
           <Input
             id="personsNumber"
-            {...register('personsNumber')}
+            {...register("personsNumber")}
             type="number"
             min={0}
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="comment">Comment</Label>
-          <Textarea id="comment" {...register('comment')} />
+          <Label htmlFor="comment">Comentariu</Label>
+          <Textarea id="comment" {...register("comment")} />
         </div>
-        <Button type="submit" size={'lg'} className="block mx-auto">
-          Submit
+        <Button
+          disabled={loading}
+          type="submit"
+          size={"lg"}
+          className="block mx-auto"
+        >
+          Trimite
         </Button>
       </form>
-    </div>
+    </animated.div>
   );
 }
