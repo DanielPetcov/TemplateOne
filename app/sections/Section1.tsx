@@ -1,9 +1,8 @@
 "use client";
 
-import { useFadeIn } from "@/hooks/useFadeIn";
+import useFadeIn from "@/hooks/useFadeIn";
 import { flower_1, leafe_2, leafe_1, flower_2 } from "../images";
-
-import { animated } from "@react-spring/web";
+import { cn } from "@/lib/utils";
 
 interface Section1Props {
   couplePhoto1Url: string;
@@ -20,13 +19,15 @@ export default function Section1({
   date,
   location,
 }: Section1Props) {
-  const { ref, style } = useFadeIn({ amount: 0.5 });
+  const { ref, isVisible } = useFadeIn({ threshold: 0.5 });
 
   return (
-    <animated.div
+    <div
       ref={ref}
-      style={style}
-      className="container mx-auto bg-custom-main px-4"
+      className={cn(
+        "container mx-auto bg-custom-main px-4 transition-opacity duration-1000 ease-in-out",
+        isVisible ? "opacity-100" : "opacity-0",
+      )}
     >
       <div className="flex flex-col gap-10 items-center justify-center">
         <div>
@@ -63,6 +64,6 @@ export default function Section1({
           </div>
         </div>
       </div>
-    </animated.div>
+    </div>
   );
 }

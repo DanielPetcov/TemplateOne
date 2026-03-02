@@ -1,16 +1,20 @@
-import { useInView, useSpring } from "@react-spring/web";
+import { useEffect, useRef, useState } from "react";
 
-export function useFadeIn({ amount }: { amount: "all" | number }) {
-  const [ref, inView] = useInView({
-    once: true,
-    amount: amount,
-  });
+export default function useFadeIn({ threshold = 0.1 }: { threshold?: number }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [isVisible, setIsVisible] = useState(false);
 
-  const style = useSpring({
-    opacity: inView ? 1 : 0,
-    transform: inView ? "translateY(0px)" : "translateY(40px)",
-    config: { tension: 120, friction: 20 },
-  });
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) setIsVisible(true);
+      },
+      { threshold },
+    );
+    if (ref.current) observer.observe(ref.current);
 
-  return { ref, style };
+    return () => observer.disconnect();
+  }, []);
+
+  return { ref, isVisible };
 }

@@ -1,9 +1,8 @@
 "use client";
 
-import { useFadeIn } from "@/hooks/useFadeIn";
+import useFadeIn from "@/hooks/useFadeIn";
 import { flower_3, leafe_1, flower_4 } from "../images";
-
-import { animated } from "@react-spring/web";
+import { cn } from "@/lib/utils";
 
 interface Section2Props {
   paragraph1: string;
@@ -11,13 +10,15 @@ interface Section2Props {
 }
 
 export default function Section2({ paragraph1, paragraph2 }: Section2Props) {
-  const { ref, style } = useFadeIn({ amount: 0.5 });
+  const { ref, isVisible } = useFadeIn({ threshold: 0.5 });
 
   return (
-    <animated.div
+    <div
       ref={ref}
-      style={style}
-      className="container mx-auto mt-20 px-4 space-y-10"
+      className={cn(
+        "container mx-auto mt-20 px-4 space-y-10 transition-opacity duration-1000 ease-in-out",
+        isVisible ? "opacity-100" : "opacity-0",
+      )}
     >
       <div className="space-y-10">
         <img src={flower_3.src} className="w-40" />
@@ -31,6 +32,6 @@ export default function Section2({ paragraph1, paragraph2 }: Section2Props) {
       <div>
         <img src={flower_4.src} className="w-40 animate-floating" />
       </div>
-    </animated.div>
+    </div>
   );
 }

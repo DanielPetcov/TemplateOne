@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import { couple_1, couple_2, couple_3, couple_4 } from "./images";
 import Section1 from "./sections/Section1";
 import Section2 from "./sections/Section2";

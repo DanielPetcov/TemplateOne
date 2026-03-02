@@ -10,11 +10,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
-import { useFadeIn } from "@/hooks/useFadeIn";
 
-import { animated } from "@react-spring/web";
+import useFadeIn from "@/hooks/useFadeIn";
+
 import { toast } from "sonner";
 import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 export default function Form() {
   const [loading, setLoading] = useState(false);
@@ -57,13 +58,15 @@ export default function Form() {
     }
   };
 
-  const { ref, style } = useFadeIn({ amount: 0.5 });
+  const { ref, isVisible } = useFadeIn({ threshold: 0.5 });
 
   return (
-    <animated.div
+    <div
       ref={ref}
-      style={style}
-      className="container mx-auto mt-10 px-10"
+      className={cn(
+        "container mx-auto mt-10 px-10 transition-opacity duration-1000 ease-in-out",
+        isVisible ? "opacity-100" : "opacity-0",
+      )}
     >
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-10">
         <div className="space-y-2">
@@ -148,6 +151,6 @@ export default function Form() {
           Trimite
         </Button>
       </form>
-    </animated.div>
+    </div>
   );
 }
