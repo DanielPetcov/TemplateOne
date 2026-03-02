@@ -1,7 +1,7 @@
 "use client";
 
-import { animated } from "@react-spring/web";
-import { useFadeIn } from "@/hooks/useFadeIn";
+import useFadeIn from "@/hooks/useFadeIn";
+import { cn } from "@/lib/utils";
 
 export default function AnimatedImage({
   url,
@@ -10,9 +10,17 @@ export default function AnimatedImage({
   url: string;
   className?: string;
 }) {
-  const { ref, style } = useFadeIn({ amount: "all" });
+  const { ref, isVisible } = useFadeIn({ threshold: 1 });
 
   return (
-    <animated.img ref={ref} style={style} src={url} className={className} />
+    <div
+      ref={ref}
+      className={cn(
+        "transition-opacity duration-1000 ease-in-out",
+        isVisible ? "opacity-100" : "opacity-0",
+      )}
+    >
+      <img src={url} className={className} />
+    </div>
   );
 }
