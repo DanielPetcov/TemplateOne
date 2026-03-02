@@ -10,7 +10,7 @@ export default function AnimatedImage({
   url: string;
   className?: string;
 }) {
-  const { ref, isVisible } = useFadeIn({ threshold: 1 });
+  const { ref, isVisible } = useFadeIn({ threshold: 0.5 });
 
   return (
     <div
